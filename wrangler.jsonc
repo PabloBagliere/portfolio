@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "pablo-bagliere-portfolio",
+  "name": "portfolio",
   "compatibility_date": "2025-10-01",
   "assets": {
     "directory": "./dist"
