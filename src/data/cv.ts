@@ -162,8 +162,8 @@ export const projects: Project[] = [
     tech: ['Cloudflare Workers', 'TanStack Start', 'TypeScript'],
   },
   {
-    slug: 'rosgan-streaming',
-    title: 'Streaming serverless para Rosgan',
+    slug: 'live-streaming',
+    title: 'Streaming serverless en vivo',
     description:
       'Plataforma que inicia transmisiones en vivo automáticamente desde dispositivos móviles, sin intervención manual. Aprovisiona servidores bajo demanda en AWS y DigitalOcean, reduciendo la necesidad de soporte técnico durante los eventos.',
     tech: ['AWS Lambda', 'SNS', 'SQS', 'S3', 'DigitalOcean', 'Docker', 'OBS WebSocket'],
@@ -193,7 +193,7 @@ export const achievements: string[] = [
   'Migré proyectos desde Vue 2 hacia Vue 3 incorporando TypeScript',
   'Migré la plataforma de WhatsApp desde una SPA con Vite hacia TanStack Start con SSR',
   'Implementé documentación técnica interna con MkDocs, protegida mediante Cloudflare Access',
-  'Optimicé búsquedas en Rosgan migrando de MySQL a Meilisearch: ~60% menos tiempo de respuesta',
+  'Optimicé las búsquedas de un sitio de alto tráfico migrando de MySQL a Meilisearch: ~60% menos tiempo de respuesta',
   'Participé en la implementación de infraestructura productiva sobre AWS, Cloudflare y DigitalOcean',
 ];
 
@@ -215,7 +215,7 @@ export const extras = {
   openSource: [
     {
       project: 'docker-ssl-proxy',
-      detail: 'fix de conexiones SSL/WebSocket usadas en el sistema de streaming de Rosgan',
+      detail: 'fix de conexiones SSL/WebSocket usadas en un sistema de streaming en vivo',
     },
     { project: 'comunidad PHP', detail: 'contribuciones menores a proyectos open source' },
   ],
