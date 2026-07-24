@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: '2-digit' });
+---
+
+<Base title={`${post.data.title} — Pablo Bagliere`} description={post.data.description}>
+  <article class="mx-auto w-full max-w-3xl px-4 pt-24 pb-16">
+    <p class="text-sm">
+      <span class="text-term-green">pablo@bagliere</span><span class="text-term-dim">:</span><span
+        class="text-term-blue">~</span
+      ><span class="text-term-dim">$</span>
+      <span class="text-term-text">cat ~/posts/{post.id}.md</span>
+    </p>
+
+    <header class="mt-8 border-b border-term-border pb-6">
+      <h1 class="text-2xl font-bold text-term-green text-glow sm:text-3xl">{post.data.title}</h1>
+      <p class="mt-3 text-xs text-term-dim sm:text-sm">
+        {fmt(post.data.pubDate)}
+        {
+          post.data.tags.length > 0 && (
+            <span> · {post.data.tags.map((t) => `#${t}`).join(' ')}</span>
+          )
+        }
+      </p>
+    </header>
+
+    <div class="prose prose-invert mt-8 max-w-none">
+      <Content />
+    </div>
+
+    <p class="mt-12 text-sm">
+      <a
+        href="/blog/"
+        class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green"
+      >
+        ← cd ..
+      </a>
+    </p>
+  </article>
+</Base>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  id: string;
+  cmd: string;
+}
+
+const { id, cmd } = Astro.props;
+---
+
+<section id={id} class="mx-auto w-full max-w-4xl scroll-mt-20 px-4 py-10 sm:py-14">
+  <h2 class="mb-4 text-sm sm:text-base">
+    <span class="text-term-green">pablo@bagliere</span><span class="text-term-dim">:</span><span
+      class="text-term-blue">~</span
+    ><span class="text-term-dim">$</span>
+    <span class="text-term-text">{cmd}</span>
+    <span class="caret text-term-green">▊</span>
+  </h2>
+  <div class="rounded-lg border border-term-border bg-term-panel p-5 sm:p-7">
+    <slot />
+  </div>
+</section>

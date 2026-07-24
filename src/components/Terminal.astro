@@ -1,0 +1,413 @@
+---
+const chips = ['help', 'whoami', 'skills', 'projects', 'cv', 'contact', 'sudo hire pablo'];
+---
+
+<section id="top" class="relative flex min-h-[100svh] flex-col items-center justify-center px-4 pt-20 pb-14">
+  <h1 class="sr-only">Pablo Bagliere — Senior Software Engineer</h1>
+
+  <div class="w-full max-w-4xl">
+    <!-- Ventana de terminal -->
+    <div
+      class="overflow-hidden rounded-lg border border-term-border bg-term-panel shadow-2xl shadow-black/60"
+    >
+      <!-- Titlebar -->
+      <div class="flex items-center gap-2 border-b border-term-border bg-term-panel2 px-4 py-2.5">
+        <span class="h-3 w-3 rounded-full bg-term-red/80"></span>
+        <span class="h-3 w-3 rounded-full bg-term-amber/80"></span>
+        <span class="h-3 w-3 rounded-full bg-term-green/80"></span>
+        <span class="mx-auto text-xs text-term-dim">pablo@bagliere: ~ — zsh</span>
+        <span class="w-14"></span>
+      </div>
+
+      <!-- Cuerpo -->
+      <div
+        id="term-body"
+        class="h-[26rem] cursor-text overflow-y-auto p-4 text-[13px] leading-relaxed sm:p-5 sm:text-sm"
+      >
+        <div id="term-output"></div>
+        <label id="term-input-line" class="invisible mt-1 flex items-center gap-1">
+          <span class="shrink-0"
+            ><span class="text-term-green">visitante@bagliere</span><span class="text-term-dim"
+              >:</span
+            ><span class="text-term-blue">~</span><span class="text-term-dim">$</span></span
+          >
+          <input
+            id="term-input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            aria-label="Terminal interactiva: escribí un comando, por ejemplo help"
+            class="min-w-0 flex-1 border-none bg-transparent text-term-text caret-(--color-term-green) outline-none"
+          />
+        </label>
+      </div>
+    </div>
+
+    <!-- Chips de comandos clickeables -->
+    <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+      <span class="text-term-dim">probá:</span>
+      {
+        chips.map((c) => (
+          <button
+            type="button"
+            data-cmd={c}
+            class="rounded border border-term-border bg-term-panel px-2.5 py-1 text-term-cyan transition-colors hover:border-term-green/60 hover:text-term-green"
+          >
+            {c}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <a
+    href="#about"
+    class="absolute bottom-10 flex flex-col items-center gap-1 text-xs text-term-dim transition-colors hover:text-term-green"
+    aria-label="Bajar a la sección about"
+  >
+    <span>scroll</span>
+    <span class="caret">▼</span>
+  </a>
+</section>
+
+<script>
+  const output = document.getElementById('term-output') as HTMLDivElement;
+  const termBody = document.getElementById('term-body') as HTMLDivElement;
+  const inputLine = document.getElementById('term-input-line') as HTMLLabelElement;
+  const input = document.getElementById('term-input') as HTMLInputElement;
+
+  const HOST_PROMPT =
+    '<span class="text-term-green">pablo@bagliere</span><span class="text-term-dim">:</span><span class="text-term-blue">~</span><span class="text-term-dim">$</span>';
+  const GUEST_PROMPT =
+    '<span class="text-term-green">visitante@bagliere</span><span class="text-term-dim">:</span><span class="text-term-blue">~</span><span class="text-term-dim">$</span>';
+
+  // Anti-scraping: el email se ensambla en runtime, no aparece completo en el código
+  const EMAIL = ['pablo.bagliere2', 'gmail.com'].join('@');
+  const MAILTO = `mailto:${EMAIL}`;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const scrollDown = () => {
+    termBody.scrollTop = termBody.scrollHeight;
+  };
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function printLine(html: string) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    output.appendChild(div);
+    scrollDown();
+  }
+
+  const dim = (t: string) => `<span class="text-term-dim">${t}</span>`;
+  const cyan = (t: string) => `<span class="text-term-cyan">${t}</span>`;
+  const green = (t: string) => `<span class="text-term-green">${t}</span>`;
+  const amber = (t: string) => `<span class="text-term-amber">${t}</span>`;
+  const link = (href: string, t: string) =>
+    `<a class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green" href="${href}">${t}</a>`;
+
+  // ---------- Intro automática ----------
+  const intro: { type: 'cmd' | 'out'; text: string }[] = [
+    { type: 'cmd', text: 'whoami' },
+    {
+      type: 'out',
+      text: `<span class="text-base font-bold text-term-green text-glow sm:text-lg">Pablo Bagliere</span>`,
+    },
+    { type: 'out', text: dim('# Senior Software Engineer · Rosario, Argentina') },
+    { type: 'cmd', text: 'cat ~/rol.txt' },
+    {
+      type: 'out',
+      text: `backend   <span class="text-term-purple">→</span> Node.js · APIs REST · arquitectura de sistemas`,
+    },
+    {
+      type: 'out',
+      text: `infra     <span class="text-term-purple">→</span> AWS · Cloudflare · Docker · Kubernetes`,
+    },
+    {
+      type: 'out',
+      text: `devops    <span class="text-term-purple">→</span> CI/CD · observabilidad · automatización`,
+    },
+    { type: 'cmd', text: 'uptime --carrera' },
+    {
+      type: 'out',
+      text: `${amber('5+ años')} construyendo productos, integraciones e infraestructura en producción.`,
+    },
+    { type: 'cmd', text: 'su visitante' },
+    {
+      type: 'out',
+      text: `${dim('# sesión iniciada como')} ${green('visitante')} ${dim('— escribí')} ${cyan('help')} ${dim('para ver los comandos')}`,
+    },
+  ];
+
+  async function typeCommand(cmd: string) {
+    const line = document.createElement('div');
+    line.innerHTML = `${HOST_PROMPT} `;
+    const span = document.createElement('span');
+    const caretEl = document.createElement('span');
+    caretEl.className = 'caret text-term-green';
+    caretEl.textContent = '▊';
+    line.appendChild(span);
+    line.appendChild(caretEl);
+    output.appendChild(line);
+    scrollDown();
+    for (const ch of cmd) {
+      span.textContent += ch;
+      scrollDown();
+      if (!reduced) await sleep(25 + Math.random() * 45);
+    }
+    caretEl.remove();
+  }
+
+  // ---------- Comandos ----------
+  const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n - s.length));
+
+  const commands: Record<string, (args: string[]) => void> = {
+    help: () => {
+      const rows: [string, string][] = [
+        ['whoami', 'quién es Pablo'],
+        ['about', 'resumen profesional'],
+        ['skills', 'stack técnico completo'],
+        ['experience', 'experiencia laboral'],
+        ['projects', 'proyectos destacados'],
+        ['wins', 'logros'],
+        ['blog', 'artículos'],
+        ['social', 'github y linkedin'],
+        ['contact', 'cómo contactarlo'],
+        ['cv', 'descargar el CV en PDF'],
+        ['ls', 'listar secciones del sitio'],
+        ['echo <txt>', 'imprimir texto'],
+        ['date', 'fecha y hora'],
+        ['clear', 'limpiar la terminal'],
+      ];
+      printLine(
+        dim('Comandos disponibles:') +
+          '\n' +
+          rows.map(([c, d]) => `  ${cyan(pad(c, 12))} ${dim(d)}`).join('\n') +
+          '\n' +
+          dim('tip: también podés scrollear, o probar') +
+          ' ' +
+          amber('sudo hire pablo'),
+      );
+    },
+    whoami: () =>
+      printLine(
+        `${green('Pablo Bagliere')} — Senior Software Engineer\n${dim('Backend, integraciones e infraestructura cloud. 5+ años en producción.')}`,
+      ),
+    about: () =>
+      printLine(
+        `Especializado en backend con ${amber('Node.js')}, diseño de ${amber('APIs')}, arquitectura de sistemas,\nDevOps e integración de plataformas. Actualmente en el ERP Histrix (MundoIT).\n${dim('sección completa ↓')} ${link('#about', '~/about')}`,
+      ),
+    skills: () =>
+      printLine(
+        `${cyan(pad('backend', 10))} Node.js · Express · Fastify · Hono · Python · FastAPI · PHP\n` +
+          `${cyan(pad('frontend', 10))} React · TanStack · Next.js · Vue 3 · Tailwind · UnoCSS\n` +
+          `${cyan(pad('db', 10))} MySQL · PostgreSQL · Redis · DragonflyDB · SQLite\n` +
+          `${cyan(pad('cloud', 10))} AWS · Cloudflare · Docker · Kubernetes · Terraform · Linux\n` +
+          `${cyan(pad('devops', 10))} GitHub Actions · Woodpecker CI · SonarQube · Trivy\n` +
+          `${dim('detalle ↓')} ${link('#skills', '~/skills')}`,
+      ),
+    experience: () =>
+      printLine(
+        `${green('Senior Software Engineer')} @ ${amber('MegaDist SRL (MundoIT)')}\n${dim('Sep 2021 → actualidad · ERP Histrix')}\n${dim('detalle ↓')} ${link('#experience', '~/experience')}`,
+      ),
+    projects: () =>
+      printLine(
+        [
+          ['sync-platform', 'sincronización WMS ↔ Tango ERP'],
+          ['mp-pos', 'integración Mercado Pago POS'],
+          ['prisma-pos', 'integración Prisma POS'],
+          ['fiserv-sitef', 'integración Fiserv Sitef'],
+          ['whatsapp-platform', 'plataforma WhatsApp Business'],
+          ['rosgan-streaming', 'streaming serverless en vivo'],
+          ['arba-api', 'API impositiva ARBA / Santa Fe'],
+          ['histrix-vue3', 'migración Vue 2 → Vue 3'],
+        ]
+          .map(([s, d]) => `  ${green('●')} ${cyan(pad(s, 19))} ${dim(d)}`)
+          .join('\n') +
+          `\n${dim('detalle ↓')} ${link('#projects', '~/projects')}`,
+      ),
+    wins: () =>
+      printLine(
+        `${green('[OK]')} 14 servidores → 2 (consolidación de infraestructura)\n` +
+          `${green('[OK]')} observabilidad centralizada con SigNoz + OpenTelemetry\n` +
+          `${green('[OK]')} búsquedas 60% más rápidas migrando a Meilisearch\n` +
+          `${dim('todos los logros ↓')} ${link('#wins', '~/wins')}`,
+      ),
+    blog: () =>
+      printLine(
+        `${dim('los artículos viven abajo ↓')} ${link('#blog', '~/posts')} ${dim('y en')} ${link('https://dev.to/pablobagliere', 'dev.to/pablobagliere')}`,
+      ),
+    social: () =>
+      printLine(
+        `${cyan('github')}    ${link('https://github.com/PabloBagliere', 'github.com/PabloBagliere')}\n` +
+          `${cyan('linkedin')}  ${link('https://www.linkedin.com/in/pablo-bagliere', 'linkedin.com/in/pablo-bagliere')}`,
+      ),
+    contact: () =>
+      printLine(
+        `${cyan('mail')}      ${link(MAILTO, EMAIL)}\n` +
+          `${cyan('github')}    ${link('https://github.com/PabloBagliere', 'github.com/PabloBagliere')}\n` +
+          `${cyan('linkedin')}  ${link('https://www.linkedin.com/in/pablo-bagliere', 'linkedin.com/in/pablo-bagliere')}\n` +
+          `${dim('o bajá hasta')} ${link('#contact', '~/contact')}`,
+      ),
+    ls: () =>
+      printLine(
+        ['about.md', 'skills/', 'experience/', 'projects/', 'wins.log', 'pablo.conf', 'posts/', 'cv.pdf', 'contact.sh']
+          .map((f) => (f.endsWith('/') ? cyan(f) : f))
+          .join('  '),
+      ),
+    cv: () => {
+      printLine(
+        `${green('descargando')} ${cyan('cv.pdf')}... ${dim('(también disponible al final de la página)')}`,
+      );
+      const a = document.createElement('a');
+      a.href = '/Pablo_Bagliere_cv.pdf';
+      a.download = 'Pablo_Bagliere_cv.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    },
+    date: () => printLine(new Date().toLocaleString('es-AR')),
+    echo: (args) => printLine(escapeHtml(args.join(' ')) || ''),
+    pwd: () => printLine('/home/pablo'),
+    uname: () => printLine('bagliere-os 5.x production/stable x86_64'),
+    clear: () => {
+      output.innerHTML = '';
+    },
+    sudo: (args) => {
+      const sub = args.join(' ');
+      if (sub === 'hire pablo' || sub === 'contratar pablo' || sub === 'hire pablo.') {
+        printLine(
+          `${green('permiso concedido.')} abriendo canal de contacto... ${dim('(excelente decisión)')}`,
+        );
+        setTimeout(() => {
+          window.location.href = MAILTO;
+        }, 900);
+      } else {
+        printLine(
+          `${dim('visitante no está en el archivo sudoers. Este incidente será reportado.')} ${dim('(mentira)')}`,
+        );
+      }
+    },
+    exit: () => printLine(dim('# no hay a dónde ir — esto es una web, no una cárcel')),
+    logout: () => printLine(dim('# no hay a dónde ir — esto es una web, no una cárcel')),
+    vim: () => printLine(dim('# :q! para salir... ah no, cierto que esto es una web')),
+    nano: () => printLine(dim('# demasiado simple, probá con vim')),
+    rm: (args) =>
+      printLine(
+        args.join(' ').includes('-rf')
+          ? 'rm: operación rechazada: el portfolio se niega a ser eliminado'
+          : 'rm: falta operando',
+      ),
+  };
+  commands['ayuda'] = commands.help;
+  commands['proyectos'] = commands.projects;
+  commands['contacto'] = commands.contact;
+  commands['cd'] = (args) => {
+    const target = (args[0] || '').replace(/^[~/]+/, '').replace(/\/$/, '');
+    const map: Record<string, string> = {
+      about: '#about',
+      skills: '#skills',
+      experience: '#experience',
+      projects: '#projects',
+      wins: '#wins',
+      etc: '#etc',
+      posts: '#blog',
+      blog: '#blog',
+      contact: '#contact',
+      '': '#top',
+      '~': '#top',
+    };
+    if (target in map) {
+      printLine(dim(`# yendo a ${target || '~'}...`));
+      document.querySelector(map[target])?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      printLine(`cd: no such file or directory: ${escapeHtml(target)}`);
+    }
+  };
+
+  const commandNames = Object.keys(commands);
+  const history: string[] = [];
+  let historyIdx = -1;
+
+  function runCommand(raw: string) {
+    const trimmed = raw.trim();
+    const echoLine = document.createElement('div');
+    echoLine.innerHTML = `${GUEST_PROMPT} `;
+    const cmdSpan = document.createElement('span');
+    cmdSpan.textContent = trimmed;
+    echoLine.appendChild(cmdSpan);
+    output.appendChild(echoLine);
+    scrollDown();
+
+    if (!trimmed) return;
+    history.push(trimmed);
+    historyIdx = history.length;
+
+    const [cmd, ...args] = trimmed.split(/\s+/);
+    const fn = commands[cmd.toLowerCase()];
+    if (fn) fn(args);
+    else
+      printLine(
+        `<span class="text-term-red">zsh: command not found:</span> ${escapeHtml(cmd)} ${dim('— probá con')} ${cyan('help')}`,
+      );
+    scrollDown();
+  }
+
+  // ---------- Eventos ----------
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      runCommand(input.value);
+      input.value = '';
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIdx > 0) {
+        historyIdx--;
+        input.value = history[historyIdx] ?? '';
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIdx < history.length - 1) {
+        historyIdx++;
+        input.value = history[historyIdx] ?? '';
+      } else {
+        historyIdx = history.length;
+        input.value = '';
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const val = input.value.toLowerCase();
+      if (!val) return;
+      const match = commandNames.find((c) => c.startsWith(val));
+      if (match) input.value = match;
+    } else if (e.key === 'l' && e.ctrlKey) {
+      e.preventDefault();
+      output.innerHTML = '';
+    }
+  });
+
+  termBody.addEventListener('click', () => input.focus());
+
+  document.querySelectorAll<HTMLButtonElement>('[data-cmd]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      runCommand(btn.dataset.cmd ?? '');
+      input.focus();
+    });
+  });
+
+  // ---------- Arranque ----------
+  (async () => {
+    for (const step of intro) {
+      if (step.type === 'cmd') {
+        await typeCommand(step.text);
+        if (!reduced) await sleep(220);
+      } else {
+        printLine(step.text);
+        if (!reduced) await sleep(110);
+      }
+    }
+    inputLine.classList.remove('invisible');
+    scrollDown();
+  })();
+</script>

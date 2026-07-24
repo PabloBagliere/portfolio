@@ -1,0 +1,110 @@
+---
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import StatusLine from '../components/StatusLine.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: 'Senior Software Engineer',
+  url: site.url,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Rosario',
+    addressRegion: 'Santa Fe',
+    addressCountry: 'AR',
+  },
+  sameAs: [site.github, site.linkedin],
+  knowsAbout: ['Node.js', 'TypeScript', 'AWS', 'Cloudflare', 'Docker', 'Kubernetes', 'DevOps'],
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0a0e14" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Blog — Pablo Bagliere" href="/rss.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="scanlines min-h-screen antialiased">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:rounded focus:bg-term-green focus:px-3 focus:py-1 focus:text-black"
+      >saltar al contenido</a
+    >
+    <Nav />
+    <main id="contenido" class="pb-16">
+      <slot />
+    </main>
+    <StatusLine />
+
+    <script>
+      // Anti-scraping: los emails se ensamblan en runtime, nunca completos en el HTML
+      document.querySelectorAll('[data-u][data-d]').forEach((el) => {
+        const addr = `${(el as HTMLElement).dataset.u}@${(el as HTMLElement).dataset.d}`;
+        if (el instanceof HTMLAnchorElement) el.href = `mailto:${addr}`;
+        if (el.hasAttribute('data-mail-text')) el.textContent = addr;
+      });
+
+      // Scrollspy: sincroniza la ventana activa de la "tmux bar" y el modo de la statusline
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-navlink]');
+      const mode = document.getElementById('statusline-mode');
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const id = entry.target.id;
+            navLinks.forEach((link) =>
+              link.classList.toggle('nav-active', link.getAttribute('href') === `/#${id}`),
+            );
+            if (mode) mode.textContent = `-- ${id.toUpperCase()} --`;
+          }
+        },
+        { rootMargin: '-40% 0px -55% 0px' },
+      );
+      sections.forEach((s) => observer.observe(s));
+
+      // Reloj de la barra (como tmux)
+      const clock = document.getElementById('nav-clock');
+      const tick = () => {
+        if (clock)
+          clock.textContent = new Date().toLocaleTimeString('es-AR', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+      };
+      tick();
+      setInterval(tick, 30_000);
+    </script>
+  </body>
+</html>

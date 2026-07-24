@@ -1,0 +1,30 @@
+---
+import { projects } from '../data/cv';
+---
+
+<div class="grid gap-4 sm:grid-cols-2">
+  {
+    projects.map((p) => (
+      <article class="group flex flex-col rounded-md border border-term-border bg-term-panel2 p-4 transition-colors hover:border-term-green/50">
+        <header class="flex items-center justify-between gap-2">
+          <h3 class="text-sm font-bold text-term-cyan">{p.slug}</h3>
+          <span class="flex shrink-0 items-center gap-1.5 text-[11px] text-term-green">
+            <span class="dot-live">●</span> producción
+          </span>
+        </header>
+        <p class="mt-1 text-xs text-term-amber">{p.title}</p>
+        <p class="mt-2 flex-1 text-[13px] leading-relaxed text-term-text/90">{p.description}</p>
+        <ul class="mt-3 flex flex-wrap gap-1.5">
+          {p.tech.map((t) => (
+            <li class="rounded border border-term-border px-1.5 py-0.5 text-[11px] text-term-dim transition-colors group-hover:border-term-purple/40 group-hover:text-term-purple">
+              {t}
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))
+  }
+</div>
+<p class="mt-6 text-xs text-term-dim">
+  # {projects.length} contenedores activos · restart policy: always
+</p>

@@ -1,0 +1,23 @@
+---
+import { profile } from '../data/cv';
+---
+
+<div class="space-y-4 text-sm leading-relaxed sm:text-[15px]">
+  <p class="text-lg font-bold text-term-green sm:text-xl">
+    <span class="text-term-dim">#</span> {profile.name}
+  </p>
+  <p>
+    {profile.summary[0]}
+  </p>
+  <p>
+    Especializado en backend con <span class="text-term-amber">Node.js</span>, diseño de <span
+      class="text-term-amber">APIs</span
+    >, <span class="text-term-amber">arquitectura de sistemas</span>, <span class="text-term-amber"
+      >DevOps</span
+    > e integración de plataformas. En MundoIT participé en el desarrollo y evolución del ERP <span
+      class="text-term-cyan">Histrix</span
+    >, diseñando soluciones utilizadas por múltiples clientes e implementando proyectos completos:
+    desde el análisis funcional hasta el despliegue en producción.
+  </p>
+  <p>{profile.summary[2]}</p>
+</div>

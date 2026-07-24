@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+import { getPosts, fmtDate } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<Base title="Blog — Pablo Bagliere" description="Artículos de Pablo Bagliere sobre software, infraestructura y desarrollo.">
+  <div class="mx-auto w-full max-w-3xl px-4 pt-24 pb-16">
+    <h1 class="text-sm sm:text-base">
+      <span class="text-term-green">pablo@bagliere</span><span class="text-term-dim">:</span><span
+        class="text-term-blue">~</span
+      ><span class="text-term-dim">$</span>
+      <span class="text-term-text">ls -lh ~/posts/</span>
+    </h1>
+
+    {
+      posts.length > 0 ? (
+        <ul class="mt-8 space-y-6">
+          {posts.map((p) => (
+            <li class="rounded-lg border border-term-border bg-term-panel p-5 transition-colors hover:border-term-green/40">
+              <p class="text-xs text-term-dim">
+                {fmtDate(p.date)}
+                {p.source === 'dev.to' && (
+                  <span class="ml-2 rounded border border-term-border px-1.5 py-0.5 text-[10px] text-term-amber">
+                    dev.to
+                  </span>
+                )}
+              </p>
+              <a
+                href={p.url}
+                class="mt-1.5 block text-base font-bold text-term-cyan transition-colors hover:text-term-green sm:text-lg"
+                {...(p.source === 'dev.to' ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {p.title}
+              </a>
+              <p class="mt-1.5 text-sm text-term-text/80">{p.description}</p>
+              {p.tags.length > 0 && (
+                <ul class="mt-3 flex flex-wrap gap-1.5">
+                  {p.tags.map((t) => (
+                    <li class="rounded border border-term-border px-1.5 py-0.5 text-[11px] text-term-dim">
+                      #{t}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="mt-8 space-y-2 rounded-lg border border-term-border bg-term-panel p-6 text-sm">
+          <p class="text-term-red">ls: cannot access '~/posts/*.md': No such file or directory</p>
+          <p class="text-term-dim"># todavía no hay artículos publicados — la tinta está en camino.</p>
+          <p class="text-term-dim">
+            # mientras tanto:{' '}
+            <a
+              href={`https://dev.to/${site.devToUsername}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green"
+            >
+              dev.to/{site.devToUsername}
+            </a>
+          </p>
+        </div>
+      )
+    }
+
+    <p class="mt-10 text-sm">
+      <a href="/" class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green">
+        ← cd ~
+      </a>
+    </p>
+  </div>
+</Base>

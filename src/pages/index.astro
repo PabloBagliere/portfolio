@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Terminal from '../components/Terminal.astro';
+import Section from '../components/Section.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Achievements from '../components/Achievements.astro';
+import Extras from '../components/Extras.astro';
+import Blog from '../components/Blog.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base>
+  <Terminal />
+  <Section id="about" cmd="cat ~/about.md"><About /></Section>
+  <Section id="skills" cmd="apt list --installed 2>/dev/null"><Skills /></Section>
+  <Section id="experience" cmd="git log --career"><Experience /></Section>
+  <Section id="projects" cmd="docker ps --filter status=running"><Projects /></Section>
+  <Section id="wins" cmd="tail -n 10 /var/log/wins.log"><Achievements /></Section>
+  <Section id="etc" cmd="cat /etc/pablo.conf"><Extras /></Section>
+  <Section id="blog" cmd="ls -lh ~/posts/"><Blog /></Section>
+  <Section id="contact" cmd="./contact.sh"><Contact /></Section>
+  <Footer />
+</Base>

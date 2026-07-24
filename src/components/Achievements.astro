@@ -1,0 +1,15 @@
+---
+import { achievements } from '../data/cv';
+---
+
+<ol class="space-y-2.5 text-[13px] leading-relaxed sm:text-sm">
+  {
+    achievements.map((a) => (
+      <li class="flex gap-3">
+        <span class="shrink-0 font-bold text-term-green">[OK]</span>
+        <span class="text-term-text/95">{a}</span>
+      </li>
+    ))
+  }
+</ol>
+<p class="mt-6 text-xs text-term-dim"># fin del log — {achievements.length} entradas, 0 errores</p>

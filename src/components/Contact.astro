@@ -1,0 +1,74 @@
+---
+import { site } from '../data/site';
+import { profile } from '../data/cv';
+
+// Anti-scraping: el email nunca aparece completo en el HTML estático.
+// Se ensambla en runtime con JS; sin JS se muestra ofuscado con [arroba].
+const [emailUser, emailDomain] = site.email.split('@');
+---
+
+<div class="space-y-2.5 text-[13px] leading-relaxed sm:text-sm">
+  <p class="text-term-dim"># iniciando canal de contacto...</p>
+  <p>
+    <span class="text-term-cyan">mail</span>
+    <span class="text-term-dim">      → </span>
+    <a
+      data-mail-text
+      data-u={emailUser}
+      data-d={emailDomain}
+      class="text-term-text underline decoration-term-dim underline-offset-4 transition-colors hover:text-term-green"
+      >{emailUser} [arroba] {emailDomain}</a
+    >
+  </p>
+  <p>
+    <span class="text-term-cyan">github</span>
+    <span class="text-term-dim">    → </span>
+    <a
+      href={site.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-term-text underline decoration-term-dim underline-offset-4 transition-colors hover:text-term-green"
+      >github.com/PabloBagliere</a
+    >
+  </p>
+  <p>
+    <span class="text-term-cyan">linkedin</span>
+    <span class="text-term-dim">  → </span>
+    <a
+      href={site.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-term-text underline decoration-term-dim underline-offset-4 transition-colors hover:text-term-green"
+      >linkedin.com/in/pablo-bagliere</a
+    >
+  </p>
+  <p>
+    <span class="text-term-cyan">ubicación</span>
+    <span class="text-term-dim"> → </span>
+    <span class="text-term-text">{profile.location} ({profile.timezone})</span>
+  </p>
+  <p>
+    <span class="text-term-cyan">modalidad</span>
+    <span class="text-term-dim">  → </span>
+    <span class="text-term-text">remoto (preferido) · híbrido en Rosario · viajes ocasionales</span>
+  </p>
+
+  <p class="pt-2 text-term-green">✔ listo — escribime, respondo rápido.</p>
+
+  <div class="flex flex-wrap gap-3 pt-4">
+    <a
+      data-u={emailUser}
+      data-d={emailDomain}
+      class="inline-block rounded border border-term-green/60 bg-term-green/10 px-4 py-2 text-sm font-bold text-term-green transition-all hover:bg-term-green hover:text-[#06110b]"
+    >
+      &gt; enviar mensaje<span class="caret">_</span>
+    </a>
+    <a
+      href="/Pablo_Bagliere_cv.pdf"
+      download="Pablo_Bagliere_cv.pdf"
+      class="inline-block rounded border border-term-cyan/60 bg-term-cyan/10 px-4 py-2 text-sm font-bold text-term-cyan transition-all hover:bg-term-cyan hover:text-[#06110b]"
+    >
+      &gt; descargar cv.pdf ↓
+    </a>
+  </div>
+</div>

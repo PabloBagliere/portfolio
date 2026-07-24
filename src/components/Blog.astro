@@ -1,0 +1,61 @@
+---
+import { getPosts, fmtDate } from '../lib/posts';
+import { site } from '../data/site';
+
+const posts = await getPosts(5);
+const hasDevTo = posts.some((p) => p.source === 'dev.to');
+---
+
+{
+  posts.length > 0 ? (
+    <div>
+      <p class="mb-3 text-xs text-term-dim">
+        total {posts.length} · últimos artículos {hasDevTo && '(incluye dev.to)'}
+      </p>
+      <ul class="space-y-2 text-[13px] sm:text-sm">
+        {posts.map((p) => (
+          <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span class="shrink-0 text-term-dim">-rw-r--r--</span>
+            <span class="shrink-0 text-term-dim">{fmtDate(p.date)}</span>
+            <a
+              href={p.url}
+              class="text-term-cyan underline decoration-term-dim underline-offset-4 transition-colors hover:text-term-green"
+              {...(p.source === 'dev.to' ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {p.title}
+            </a>
+            {p.source === 'dev.to' && (
+              <span class="rounded border border-term-border px-1.5 py-0.5 text-[10px] text-term-amber">
+                dev.to
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p class="mt-5 text-xs">
+        <a
+          href="/blog/"
+          class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green"
+        >
+          cd ~/posts → ver todos
+        </a>
+      </p>
+    </div>
+  ) : (
+    <div class="space-y-2 text-[13px] sm:text-sm">
+      <p class="text-term-red">ls: cannot access '~/posts/*.md': No such file or directory</p>
+      <p class="text-term-dim"># todavía no hay artículos publicados — la tinta está en camino.</p>
+      <p class="text-term-dim">
+        # mientras tanto:{' '}
+        <a
+          href={`https://dev.to/${site.devToUsername}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-term-cyan underline decoration-term-dim underline-offset-4 hover:text-term-green"
+        >
+          dev.to/{site.devToUsername}
+        </a>
+      </p>
+    </div>
+  )
+}

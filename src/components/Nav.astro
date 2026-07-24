@@ -1,0 +1,40 @@
+---
+const windows = [
+  { n: 0, id: 'about', label: 'about' },
+  { n: 1, id: 'skills', label: 'skills' },
+  { n: 2, id: 'experience', label: 'exp' },
+  { n: 3, id: 'projects', label: 'projects' },
+  { n: 4, id: 'wins', label: 'wins' },
+  { n: 5, id: 'etc', label: 'etc' },
+  { n: 6, id: 'blog', label: 'blog' },
+  { n: 7, id: 'contact', label: 'contact' },
+];
+---
+
+<nav
+  aria-label="Navegación principal"
+  class="fixed top-0 z-50 w-full border-b border-term-border bg-term-bg/90 backdrop-blur"
+>
+  <div class="mx-auto flex max-w-5xl items-center gap-1 overflow-x-auto px-3 py-2 text-xs">
+    <a
+      href="/#top"
+      class="mr-2 shrink-0 rounded-sm bg-term-green px-2 py-1 font-bold text-[#06110b]"
+      aria-label="Ir al inicio"
+    >
+      [pablo]
+    </a>
+    {
+      windows.map((w) => (
+        <a
+          href={`/#${w.id}`}
+          data-navlink
+          class="shrink-0 rounded-sm px-2 py-1 text-term-dim transition-colors hover:text-term-text"
+        >
+          <span class="text-term-dim/70">{w.n}:</span>
+          <span class="text-term-text">{w.label}</span>
+        </a>
+      ))
+    }
+    <span class="ml-auto hidden shrink-0 pl-4 text-term-dim sm:inline" id="nav-clock">--:--</span>
+  </div>
+</nav>

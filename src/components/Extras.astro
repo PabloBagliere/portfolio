@@ -1,0 +1,71 @@
+---
+import { extras } from '../data/cv';
+---
+
+<div class="grid gap-x-10 gap-y-7 text-[13px] sm:text-sm md:grid-cols-2">
+  <div>
+    <p class="mb-2 font-bold text-term-purple">[educacion]</p>
+    <ul class="space-y-1.5">
+      <li>
+        <span class="text-term-cyan">titulo</span><span class="text-term-dim"> = </span><span
+          class="text-term-amber">"{extras.education.title}"</span
+        >
+      </li>
+      <li>
+        <span class="text-term-cyan">escuela</span><span class="text-term-dim"> = </span><span
+          class="text-term-amber">"{extras.education.school}"</span
+        >
+      </li>
+      <li>
+        <span class="text-term-cyan">estado</span><span class="text-term-dim"> = </span><span
+          class="text-term-amber">"{extras.education.status}"</span
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <p class="mb-2 font-bold text-term-purple">[idiomas]</p>
+    <ul class="space-y-1.5">
+      {
+        extras.languages.map((l) => (
+          <li>
+            <span class="text-term-cyan">{l.name}</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{l.level}"</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div>
+    <p class="mb-2 font-bold text-term-purple">[modalidad]</p>
+    <ul class="space-y-1.5">
+      {
+        extras.workMode.map((m) => (
+          <li>
+            <span class="text-term-cyan">{m.key}</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{m.value}"</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div>
+    <p class="mb-2 font-bold text-term-purple">[open_source]</p>
+    <ul class="space-y-1.5">
+      {
+        extras.openSource.map((o) => (
+          <li>
+            <span class="text-term-cyan">{o.project}</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{o.detail}"</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

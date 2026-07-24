@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="404 — comando no encontrado">
+  <div class="mx-auto flex min-h-[80svh] w-full max-w-3xl flex-col justify-center px-4 pt-20">
+    <div class="rounded-lg border border-term-border bg-term-panel p-6 text-sm leading-relaxed sm:p-8">
+      <p>
+        <span class="text-term-green">visitante@bagliere</span><span class="text-term-dim">:</span
+        ><span class="text-term-blue">~</span><span class="text-term-dim">$</span>
+        <span class="text-term-text">cd {Astro.url.pathname}</span>
+      </p>
+      <p class="mt-3 text-term-red">
+        zsh: no such file or directory: {Astro.url.pathname}
+      </p>
+      <p class="mt-3 text-term-dim"># error 404 — la ruta que buscás no existe (o fue eliminada con rm -rf).</p>
+      <p class="mt-6">
+        <a
+          href="/"
+          class="inline-block rounded border border-term-green/60 bg-term-green/10 px-4 py-2 font-bold text-term-green transition-all hover:bg-term-green hover:text-[#06110b]"
+        >
+          &gt; cd ~
+        </a>
+      </p>
+    </div>
+  </div>
+</Base>
