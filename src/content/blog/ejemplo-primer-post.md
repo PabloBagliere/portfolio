@@ -2,7 +2,7 @@
 title: 'Hola, mundo'
 description: 'Post de ejemplo: cambiá draft a false (o borralo) para publicar tu primer artículo.'
 pubDate: 2026-07-24
-draft: false
+draft: true
 tags: ['ejemplo']
 ---
 
