@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "og": "node scripts/generate-og.mjs",
     "preview": "astro preview",
     "deploy": "npm run build && wrangler deploy"
   },
@@ -16,8 +17,11 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
+    "satori": "^0.29.0",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
     "wrangler": "^4.114.0"
   }
