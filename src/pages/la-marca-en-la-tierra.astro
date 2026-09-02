@@ -1,0 +1,60 @@
+---
+const title = 'La marca en la tierra | Corto animado';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#142e35" />
+    <title>{title}</title>
+    <meta name="description" content="Corto animado basado en La marca en la tierra." />
+  </head>
+  <body>
+    <main class="player">
+      <canvas id="movie" aria-label="Corto animado de La marca en la tierra"></canvas>
+      <section class="intro" id="intro">
+        <p>UN CORTO ANIMADO</p>
+        <h1>La marca<br /><em>en la tierra</em></h1>
+        <span>Basado en el resumen de lectura</span>
+        <button id="start">▶ Ver animación</button>
+      </section>
+      <div class="caption" id="caption" aria-live="polite"></div>
+      <input class="bar" id="seek" type="range" min="0" value="0" step="0.1" aria-label="Avance de la animación" />
+      <div class="actions">
+        <button id="previous" aria-label="Escena anterior">|◀</button>
+        <button id="toggle" aria-label="Pausar">||</button>
+        <button id="narration" aria-label="Activar narración">♬ Voz: no</button>
+        <button id="restart">↺ Reiniciar</button>
+        <span id="time">00:00</span>
+      </div>
+    </main>
+    <script>
+      import '../lib/la-marca-en-la-tierra.js';
+    </script>
+  </body>
+</html>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&display=swap');
+  :global(*) { box-sizing: border-box; }
+  :global(body) { align-items: center; background: #0e1d25; color: #fff5e2; display: flex; font-family: 'DM Mono', monospace; margin: 0; min-height: 100dvh; }
+  .player { background: #142e35; box-shadow: 0 25px 80px #0009; isolation: isolate; margin: auto; max-width: 1280px; min-height: min(100dvh, 720px); overflow: hidden; position: relative; width: 100%; }
+  canvas { display: block; height: 100%; inset: 0; position: absolute; width: 100%; }
+  .intro { align-items: center; background: #142e35e8; display: flex; flex-direction: column; inset: 0; justify-content: center; position: absolute; text-align: center; transition: opacity .6s, visibility .6s; z-index: 3; }
+  .intro.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+  .intro p { color: #edbf76; font-size: 11px; letter-spacing: .2em; margin: 0 0 16px; }
+  h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(70px, 10vw, 132px); font-weight: 400; letter-spacing: -.06em; line-height: .82; margin: 0; }
+  em { color: #edbf76; font-weight: inherit; }
+  .intro span { font-size: 12px; margin: 28px 0; opacity: .75; }
+  button { border: 0; cursor: pointer; font: inherit; }
+  #start { background: #edbf76; border-radius: 30px; color: #142e35; font-size: 12px; padding: 15px 23px; }
+  .caption { background: #fff5e2e8; border-radius: 4px; color: #142e35; font-size: clamp(12px, 1.5vw, 17px); left: 50%; line-height: 1.5; max-width: min(610px, 78%); opacity: 0; padding: 11px 18px; position: absolute; text-align: center; top: 28px; transform: translate(-50%, -12px); transition: opacity .35s, transform .35s; z-index: 2; }
+  .caption.show { opacity: 1; transform: translate(-50%, 0); }
+  .bar { accent-color: #edbf76; bottom: 19px; cursor: pointer; height: 12px; left: 24px; position: absolute; right: 24px; width: calc(100% - 48px); z-index: 2; }
+  .actions { align-items: center; bottom: 30px; display: flex; font-size: 10px; gap: 13px; left: 25px; position: absolute; right: 25px; z-index: 2; }
+  .actions button { background: #142e35b8; color: #fff5e2; font-size: 11px; padding: 5px 7px; }
+  .actions span { margin-left: auto; }
+  @media (max-width: 600px) { .player { min-height: 100dvh; } .caption { top: 20px; } .actions { bottom: 30px; gap: 5px; } .actions button { font-size: 9px; padding: 5px; } }
+</style>
