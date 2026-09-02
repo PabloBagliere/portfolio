@@ -25,6 +25,33 @@ import { extras } from '../data/cv';
   </div>
 
   <div>
+    <p class="mb-2 font-bold text-term-purple">[certificaciones]</p>
+    <ul class="space-y-3">
+      {
+        extras.certifications.map((certification) => (
+          <li>
+            <span class="text-term-cyan">titulo</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{certification.title}"</span>
+            <br />
+            <span class="text-term-cyan">institucion</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{certification.issuer}"</span>
+            <br />
+            <span class="text-term-cyan">carga_horaria</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{certification.workload}"</span>
+            <br />
+            <span class="text-term-cyan">estado</span>
+            <span class="text-term-dim"> = </span>
+            <span class="text-term-amber">"{certification.status}"</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div>
     <p class="mb-2 font-bold text-term-purple">[idiomas]</p>
     <ul class="space-y-1.5">
       {

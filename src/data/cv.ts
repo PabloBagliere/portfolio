@@ -203,6 +203,14 @@ export const extras = {
     school: 'Escuela Técnica N.º 648',
     status: 'finalizado (2020)',
   },
+  certifications: [
+    {
+      title: 'Diplomatura en DevOps',
+      issuer: 'FCEFyN-UNC y Mundos E',
+      workload: '250 horas',
+      status: 'aprobada (agosto de 2026)',
+    },
+  ],
   languages: [
     { name: 'español', level: 'nativo' },
     { name: 'inglés', level: 'básico — lectura de documentación técnica con apoyo de traducción' },
