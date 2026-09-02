@@ -65,13 +65,13 @@ function circle(x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.ar
 function backdrop(t, mode = 0) {
   const danger = mode === 5;
   const sky = ctx.createLinearGradient(0, 0, 0, 720);
-  sky.addColorStop(0, danger ? '#56323a' : '#27606a'); sky.addColorStop(1, danger ? '#d1744e' : '#e6a967');
+  sky.addColorStop(0, danger ? '#3c2028' : '#10151d'); sky.addColorStop(1, danger ? '#e46876' : '#151c26');
   ctx.fillStyle = sky; ctx.fillRect(0, 0, 1280, 720);
-  circle(mode === 3 ? 180 : 940, 118, 63, danger ? '#ef9770' : '#ffe2a3');
-  ctx.fillStyle = '#315951'; mountain(0, 490, 300, 210); mountain(220, 490, 410, 300); mountain(570, 490, 360, 240); mountain(860, 490, 430, 290);
-  ctx.fillStyle = '#193e3b'; ctx.fillRect(0, 485, 1280, 235);
-  ctx.fillStyle = mode === 3 ? '#6b8a6a' : '#b86c41'; ctx.beginPath(); ctx.moveTo(0, 625); ctx.quadraticCurveTo(360, 560, 690, 630); ctx.quadraticCurveTo(950, 690, 1280, 585); ctx.lineTo(1280, 720); ctx.lineTo(0, 720); ctx.fill();
-  for (let x = 30; x < 1280; x += 58) line(x, 645 + Math.sin(x) * 10, x + 12, 615 + Math.cos(x) * 11, 2, '#de9658');
+  circle(mode === 3 ? 180 : 940, 118, 63, danger ? '#e46876' : '#54c8dc');
+  ctx.fillStyle = '#1f2937'; mountain(0, 490, 300, 210); mountain(220, 490, 410, 300); mountain(570, 490, 360, 240); mountain(860, 490, 430, 290);
+  ctx.fillStyle = '#10151d'; ctx.fillRect(0, 485, 1280, 235);
+  ctx.fillStyle = mode === 3 ? '#151c26' : '#10151d'; ctx.beginPath(); ctx.moveTo(0, 625); ctx.quadraticCurveTo(360, 560, 690, 630); ctx.quadraticCurveTo(950, 690, 1280, 585); ctx.lineTo(1280, 720); ctx.lineTo(0, 720); ctx.fill();
+  for (let x = 30; x < 1280; x += 58) line(x, 645 + Math.sin(x) * 10, x + 12, 615 + Math.cos(x) * 11, 2, '#3fd68c');
 }
 
 function mountain(x, y, w, h) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + w * .48, y - h); ctx.lineTo(x + w, y); ctx.fill(); }
