@@ -7,6 +7,7 @@ const toggle = document.querySelector('#toggle');
 const restart = document.querySelector('#restart');
 const previous = document.querySelector('#previous');
 const narration = document.querySelector('#narration');
+const speedButton = document.querySelector('#speed');
 const timeLabel = document.querySelector('#time');
 
 let started = false;
@@ -15,6 +16,7 @@ let startAt = 0;
 let pausedAt = 0;
 let lastCaption = '';
 let narrationOn = false;
+let playbackRate = 1;
 let size = { w: 1280, h: 720, scale: 1 };
 
 const narrationLines = [
@@ -138,7 +140,7 @@ function scene(t) {
 
 function frame(now) {
   if (!started) return;
-  const elapsed = paused ? pausedAt : Math.min((now - startAt) / 1000, duration);
+  const elapsed = currentTime(now);
   const dpr = devicePixelRatio; ctx.setTransform(dpr * size.scale, 0, 0, dpr * size.scale, (size.w - 1280 * size.scale) * dpr / 2, (size.h - 720 * size.scale) * dpr / 2);
   scene(elapsed);
   const currentCaption = captions.find(([from, to]) => elapsed >= from && elapsed < to)?.[2] || '';
@@ -146,7 +148,7 @@ function frame(now) {
     caption.textContent = currentCaption;
     caption.classList.toggle('show', Boolean(currentCaption));
     lastCaption = currentCaption;
-    if (narrationOn && currentCaption) speak(currentCaption);
+    if (narrationOn && currentCaption && !paused) speak(currentCaption);
   }
   seek.value = elapsed;
   const elapsedMinutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
@@ -162,18 +164,34 @@ function speak(text) {
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'es-AR';
-  utterance.rate = 1;
+  utterance.rate = playbackRate;
   const voice = window.speechSynthesis.getVoices().find(({ lang }) => lang.startsWith('es'));
   if (voice) utterance.voice = voice;
   window.speechSynthesis.speak(utterance);
 }
 
-function playFrom(seconds = 0) { paused = false; pausedAt = seconds; startAt = performance.now() - seconds * 1000; toggle.textContent = '||'; requestAnimationFrame(frame); }
+function currentTime(now = performance.now()) {
+  return paused ? pausedAt : Math.min((now - startAt) / 1000 * playbackRate, duration);
+}
+
+function playFrom(seconds = 0) { paused = false; pausedAt = seconds; startAt = performance.now() - seconds * 1000 / playbackRate; toggle.textContent = '||'; requestAnimationFrame(frame); }
 document.querySelector('#start').addEventListener('click', () => { intro.classList.add('hidden'); started = true; playFrom(); });
-toggle.addEventListener('click', () => { if (!started) return; if (paused) playFrom(pausedAt); else { pausedAt = (performance.now() - startAt) / 1000; paused = true; toggle.textContent = '▶'; window.speechSynthesis.cancel(); } });
+toggle.addEventListener('click', () => {
+  if (!started) return;
+  if (paused) {
+    const resumeVoice = narrationOn && window.speechSynthesis.paused;
+    playFrom(pausedAt);
+    if (resumeVoice) window.speechSynthesis.resume();
+    else if (narrationOn && lastCaption) speak(lastCaption);
+  } else {
+    pausedAt = currentTime(); paused = true; toggle.textContent = '▶';
+    if (narrationOn) window.speechSynthesis.pause();
+  }
+});
 restart.addEventListener('click', () => { if (!started) { intro.classList.add('hidden'); started = true; } playFrom(0); });
-previous.addEventListener('click', () => { if (!started) return; const now = paused ? pausedAt : (performance.now() - startAt) / 1000; const current = Math.max(0, captions.findIndex(([, to]) => now < to)); playFrom(captions[Math.max(0, current - 1)][0]); });
-seek.addEventListener('input', () => { if (!started) return; const target = Number(seek.value); pausedAt = target; startAt = performance.now() - target * 1000; lastCaption = ''; if (paused) { ctx.setTransform(1, 0, 0, 1, 0, 0); frame(performance.now()); } });
+previous.addEventListener('click', () => { if (!started) return; const now = currentTime(); const current = Math.max(0, captions.findIndex(([, to]) => now < to)); playFrom(captions[Math.max(0, current - 1)][0]); });
+seek.addEventListener('input', () => { if (!started) return; const target = Number(seek.value); window.speechSynthesis.cancel(); pausedAt = target; startAt = performance.now() - target * 1000 / playbackRate; lastCaption = ''; if (paused) { ctx.setTransform(1, 0, 0, 1, 0, 0); frame(performance.now()); } });
 narration.addEventListener('click', () => { narrationOn = !narrationOn; narration.textContent = narrationOn ? '♬ Voz: sí' : '♬ Voz: no'; if (!narrationOn) window.speechSynthesis.cancel(); else if (lastCaption) speak(lastCaption); });
+speedButton.addEventListener('click', () => { const now = currentTime(); playbackRate = playbackRate === 1 ? 2 : 1; speedButton.textContent = `${playbackRate}x`; startAt = performance.now() - now * 1000 / playbackRate; if (narrationOn && lastCaption) speak(lastCaption); });
 seek.max = duration;
 window.addEventListener('resize', resize); resize();

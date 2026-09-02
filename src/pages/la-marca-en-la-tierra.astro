@@ -12,6 +12,10 @@ const title = 'La marca en la tierra | Corto animado';
     <meta name="description" content="Corto animado basado en La marca en la tierra." />
   </head>
   <body>
+    <header class="masthead">
+      <a href="/">← Volver al portfolio</a>
+      <span>Lengua y Literatura · Trabajo práctico</span>
+    </header>
     <main class="player">
       <canvas id="movie" aria-label="Corto animado de La marca en la tierra"></canvas>
       <section class="intro" id="intro">
@@ -25,11 +29,36 @@ const title = 'La marca en la tierra | Corto animado';
       <div class="actions">
         <button id="previous" aria-label="Escena anterior">|◀</button>
         <button id="toggle" aria-label="Pausar">||</button>
+        <button id="speed" aria-label="Cambiar velocidad">1x</button>
         <button id="narration" aria-label="Activar narración">♬ Voz: no</button>
         <button id="restart">↺ Reiniciar</button>
         <span id="time">00:00</span>
       </div>
     </main>
+    <article class="reading-notes">
+      <p class="kicker">Ficha de lectura</p>
+      <h2>La marca en la tierra</h2>
+      <p class="deck">Un relato situado en la Patagonia argentina sobre la infancia, el abandono, la violencia y el valor de una comunidad que decide intervenir.</p>
+      <div class="notes-grid">
+        <section>
+          <h3>Personajes principales</h3>
+          <p><strong>Edelina</strong> deja la escuela para cuidar a Alma y Celeste. <strong>Indira</strong>, hija del intendente, busca refugio al escapar de la violencia. <strong>Lisandro</strong>, hijo del capataz vecino, las ayuda.</p>
+        </section>
+        <section>
+          <h3>Conflicto</h3>
+          <p>El abandono de la madre deja a las niñas sin cuidado. Mientras las funcionarias investigan, el poder del intendente impide que actúen frente a la violencia que vive Indira.</p>
+        </section>
+        <section>
+          <h3>Desenlace</h3>
+          <p>Aureliana bloquea el camino con sus vacas. La reacción violenta del intendente reúne al pueblo, que logra detenerlo. Finalmente Edelina puede volver a la escuela.</p>
+        </section>
+      </div>
+      <section class="summary">
+        <h3>Resumen</h3>
+        <p>Edelina vive en un campo patagónico con sus hermanas Alma y Celeste. Tras el abandono de su madre, asume el cuidado de las niñas y deja la escuela. El intendente denuncia la situación y llegan las funcionarias María Eugenia e Isabel. En paralelo, Amelia, la maestra, revela que Indira y su madre sufren violencia a manos del intendente, pero las funcionarias no intervienen sin una denuncia.</p>
+        <p>Indira escapa a la casa de Edelina. Cuando el intendente sale armado a buscarla, Aureliana coloca sus vacas en el camino. Él les dispara, el pueblo acude y el intendente es detenido. Indira y su madre parten a la ciudad, mientras Orfelia cuida a las hermanas de Edelina para que ella pueda regresar a la escuela.</p>
+      </section>
+    </article>
     <script>
       import '../lib/la-marca-en-la-tierra.js';
     </script>
@@ -39,7 +68,9 @@ const title = 'La marca en la tierra | Corto animado';
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&display=swap');
   :global(*) { box-sizing: border-box; }
-  :global(body) { align-items: center; background: #0e1d25; color: #fff5e2; display: flex; font-family: 'DM Mono', monospace; margin: 0; min-height: 100dvh; }
+  :global(body) { background: #0e1d25; color: #fff5e2; font-family: 'DM Mono', monospace; margin: 0; min-height: 100dvh; }
+  .masthead { align-items: center; background: #0e1d25; display: flex; font-size: 11px; justify-content: space-between; letter-spacing: .06em; margin: auto; max-width: 1280px; padding: 18px 24px; text-transform: uppercase; }
+  .masthead a { color: #edbf76; text-decoration: none; }
   .player { background: #142e35; box-shadow: 0 25px 80px #0009; isolation: isolate; margin: auto; max-width: 1280px; min-height: min(100dvh, 720px); overflow: hidden; position: relative; width: 100%; }
   canvas { display: block; height: 100%; inset: 0; position: absolute; width: 100%; }
   .intro { align-items: center; background: #142e35e8; display: flex; flex-direction: column; inset: 0; justify-content: center; position: absolute; text-align: center; transition: opacity .6s, visibility .6s; z-index: 3; }
@@ -56,5 +87,14 @@ const title = 'La marca en la tierra | Corto animado';
   .actions { align-items: center; bottom: 30px; display: flex; font-size: 10px; gap: 13px; left: 25px; position: absolute; right: 25px; z-index: 2; }
   .actions button { background: #142e35b8; color: #fff5e2; font-size: 11px; padding: 5px 7px; }
   .actions span { margin-left: auto; }
-  @media (max-width: 600px) { .player { min-height: 100dvh; } .caption { top: 20px; } .actions { bottom: 30px; gap: 5px; } .actions button { font-size: 9px; padding: 5px; } }
+  .reading-notes { color: #dfe7dc; margin: 0 auto; max-width: 1000px; padding: 90px 28px 110px; }
+  .kicker { color: #edbf76; font-size: 11px; letter-spacing: .15em; margin: 0 0 15px; text-transform: uppercase; }
+  .reading-notes h2 { color: #fff5e2; font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(48px, 7vw, 82px); font-weight: 400; letter-spacing: -.04em; line-height: .9; margin: 0; }
+  .deck { font-family: Georgia, serif; font-size: clamp(18px, 2.2vw, 25px); line-height: 1.45; margin: 28px 0 62px; max-width: 700px; }
+  .notes-grid { border-top: 1px solid #54706e; display: grid; gap: 28px; grid-template-columns: repeat(3, 1fr); padding: 25px 0 62px; }
+  .notes-grid h3, .summary h3 { color: #edbf76; font-size: 12px; letter-spacing: .08em; margin: 0 0 14px; text-transform: uppercase; }
+  .notes-grid p, .summary p { font-family: Georgia, serif; font-size: 17px; line-height: 1.65; margin: 0; }
+  .summary { border-left: 3px solid #edbf76; max-width: 800px; padding-left: 25px; }
+  .summary p + p { margin-top: 18px; }
+  @media (max-width: 600px) { .masthead { padding: 15px; } .masthead span { display: none; } .player { min-height: 100dvh; } .caption { top: 20px; } .actions { bottom: 30px; gap: 5px; } .actions button { font-size: 9px; padding: 5px; } .reading-notes { padding: 65px 22px 85px; } .notes-grid { grid-template-columns: 1fr; } }
 </style>
